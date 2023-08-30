@@ -236,6 +236,12 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
         fechamento da ação. Se o primeiro valor for maior que o segundo, o
         gráfico ficará vermelho, indicando desvalorização naquele intervalo e
         verde caso contrário.
+
+        Com o gráfico de linhas, também temos o Indicator. O Indicator serve
+        para visualizar uma variação resumida de valores. O Indicator possui
+        alguns modos de gráficos como o number, delta e gauge. No nosso exemplo
+        estamos usando o number e delta. Esses modos foram usados para formatar
+        no estilo NASDAQ.
     """
 
     sub_stock = (stock_df.loc[stock_df['Name'] == value]).copy(deep=True)
