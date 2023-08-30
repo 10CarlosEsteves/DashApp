@@ -5,12 +5,12 @@
 
 # Propósito:
 
-O projeto de dashboard a seguir é parte integrante da avaliação da disciplina de Probabilidade e Estatística Experimental no CESUPA. O objetivo deste projeto é familiarizar os alunos com o campo da ciência de dados, utilizando a linguagem de programação Python e as bibliotecas Pandas, Plotly e Dash. Além disso, busca-se aplicar os conhecimentos adquiridos ao longo do semestre de forma prática e interativa.
+<p style="text-align: justify">O projeto de dashboard a seguir é parte integrante da avaliação da disciplina de Probabilidade e Estatística Experimental no CESUPA. O objetivo deste projeto é familiarizar os alunos com o campo da ciência de dados, utilizando a linguagem de programação Python e as bibliotecas Pandas, Plotly e Dash. Além disso, busca-se aplicar os conhecimentos adquiridos ao longo do semestre de forma prática e interativa.
 
 # Descrição do Dashboard:
 
 
-O projeto consiste em um dashboard interativo dedicado a acompanhar as ações de cinco empresas de tecnologia: Microsoft, Amazon, Apple, Netflix e Google. Para alimentar esse painel, foram utilizado os dados de preços de ações provenientes da bolsa de valores NASDAQ. Esses dados foram obtidos por meio do repositório Kaggle: <a href="https://www.kaggle.com/datasets/soumendraprasad/stock">MAANG Historical Stock Market Data</a>.
+<p style="text-align: justify;">O projeto consiste em um dashboard interativo dedicado a acompanhar as ações de cinco empresas de tecnologia: Microsoft, Amazon, Apple, Netflix e Google. Para alimentar esse painel, foram utilizado os dados de preços de ações provenientes da bolsa de valores NASDAQ. Esses dados foram obtidos por meio do repositório Kaggle: <a href="https://www.kaggle.com/datasets/soumendraprasad/stock">MAANG Historical Stock Market Data</a>.</p>
 
 Após o download desses dados, eles foram integrados ao aplicativo Dash. A partir desses dados, três tipos de gráficos foram gerados e são exibidos no dash:
 
@@ -29,6 +29,8 @@ A escolha de criar um painel voltado para ações se deve à sua importância pa
 - <a href="https://dash-bootstrap-components.opensource.faculty.ai/docs/">Dash-Bootstrap-Components Documentation</a>
 
 - <a href="https://dash-bootstrap-components.opensource.faculty.ai/docs/components/">Dash-Bootstrap-Components Components</a>
+
+</p>
 
 - <a href="https://github.com/AnnMarieW/dash-bootstrap-templates">Dash-Bootstrap-Templates QuickStart</a>
 
