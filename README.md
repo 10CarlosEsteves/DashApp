@@ -1,2 +1,3 @@
-# DashApp
-alguma coisa aleatória
+# STOCK CHART
+
+#Propósito
