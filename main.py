@@ -5,10 +5,10 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
-from debugpy.server.cli import switches
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+# Selecionando os temas que vão ser utilizados no ThemeChangerAIO
 available_themes = [
                         {"label": "Flatly", "value": dbc.themes.FLATLY},
                         {"label": "Cosmo", "value": dbc.themes.COSMO},
@@ -28,11 +28,13 @@ google_df = pd.read_csv("Assets/Data/Google.csv")
 microsoft_df = pd.read_csv("Assets/Data/Microsoft.csv")
 netflix_df = pd.read_csv("Assets/Data/Netflix.csv")
 
+# Acrescentando a coluna de Nome aos DataFrames
 amazon_df['Name'] = 'Amazon'
 apple_df['Name'] = 'Apple'
 google_df['Name'] = 'Google'
 microsoft_df['Name'] = 'Microsoft'
 netflix_df['Name'] = 'Netflix'
+
 
 stocks_cpy = [amazon_df.copy(deep=True),
               apple_df.copy(deep=True),
@@ -40,12 +42,14 @@ stocks_cpy = [amazon_df.copy(deep=True),
               microsoft_df.copy(deep=True),
               netflix_df.copy(deep=True)]
 
+# Concatenando todos os DataFrames em um só DataFrame
 stock_df = pd.concat(stocks_cpy, ignore_index=True)
+
 # Fim da importação dos dados externos e criação de DataFrames
 
-
 company_options = [{'label': x.upper(), 'value': x} for x in stock_df['Name'].unique()]
-app.title = "MAANG Stock"
+
+app.title = "Stock Chart"
 
 # Inicio da construção do CSS do dashboard
 div1_style = {'text-align': 'center'}
@@ -70,6 +74,8 @@ graph2_row_style = {
 
 # Inicio da construção em HTML do dashboard
 app.layout = dbc.Container([
+    # Seção do gráfico de linhas com multi comparação
+    # Utilizando o ThemeChangerAIO para mudança de tema
     dbc.Row(ThemeChangerAIO(aio_id="theme", radio_props={"value": dbc.themes.FLATLY, "options": available_themes})),
 
     dbc.Row([html.H1(children='Dash App', className=class_title)]),
@@ -78,35 +84,42 @@ app.layout = dbc.Container([
 
     dbc.Row([
         dbc.Col([
+            # Seção do gráfico de linhas
             html.H1("Stock Close Chart", className=class_title),
 
             dcc.Dropdown(company_options, value='Amazon', id='dropdown-close'),
 
+            # Agrupamento de botões que permite filtrar a data
             html.Div([
                     dbc.ButtonGroup([
-                    dbc.Button('5 D', id='btn1', n_clicks=0, className=class_button1),
-                    dbc.Button('1 M', id='btn2', n_clicks=0, className=class_button1),
-                    dbc.Button('6 M', id='btn3', n_clicks=0, className=class_button1),
-                    dbc.Button('1 A', id='btn4', n_clicks=0, className=class_button1),
-                    dbc.Button('5 A', id='btn5', n_clicks=0, className=class_button1),
-                    dbc.Button('Máx', id='btn6', n_clicks=0, className=class_button1)
+                        dbc.Button('5 D', id='btn1', n_clicks=0, className=class_button1),
+                        dbc.Button('1 M', id='btn2', n_clicks=0, className=class_button1),
+                        dbc.Button('6 M', id='btn3', n_clicks=0, className=class_button1),
+                        dbc.Button('1 A', id='btn4', n_clicks=0, className=class_button1),
+                        dbc.Button('5 A', id='btn5', n_clicks=0, className=class_button1),
+                        dbc.Button('Máx', id='btn6', n_clicks=0, className=class_button1)
                     ])
                 ], style=div1_style),
             dcc.Graph(id='stocks')
         ]),
 
+
+
         dbc.Col([
+            # Seção do gráfico de CandleStick
             html.H1("Candlestick Chart", className=class_title),
 
             dcc.Dropdown(company_options, value='Amazon', id='candlestick-dropdown'),
-
+            # Agrupamento de botões que permite filtrar a data
             html.Div([
-                    dbc.Button('5 D', id='btn7', n_clicks=0, className=class_button1),
-                    dbc.Button('1 M', id='btn8', n_clicks=0, className=class_button1),
-                    dbc.Button('6 M', id='btn9', n_clicks=0, className=class_button1),
-                    dbc.Button('1 A', id='btn10', n_clicks=0, className=class_button1),
-                    dbc.Button('5 A', id='btn11', n_clicks=0, className=class_button1),
-                    dbc.Button('Máx', id='btn12', n_clicks=0, className=class_button1)
+                    dbc.ButtonGroup([
+                        dbc.Button('5 D', id='btn7', n_clicks=0, className=class_button1),
+                        dbc.Button('1 M', id='btn8', n_clicks=0, className=class_button1),
+                        dbc.Button('6 M', id='btn9', n_clicks=0, className=class_button1),
+                        dbc.Button('1 A', id='btn10', n_clicks=0, className=class_button1),
+                        dbc.Button('5 A', id='btn11', n_clicks=0, className=class_button1),
+                        dbc.Button('Máx', id='btn12', n_clicks=0, className=class_button1)
+                    ])
                 ], style=div1_style),
             dcc.Graph(id='candlestick')
         ])
@@ -118,14 +131,19 @@ app.layout = dbc.Container([
 
 # Inicio da construção de callbacks do dashboard
 @app.callback(
-    [Output('comparison-dropdown', 'style'),
+    [
+     Output('comparison-dropdown', 'style'),
      Output('dropdown-close', 'style'),
      Output('candlestick-dropdown', 'style')
      ],
     Input(ThemeChangerAIO.ids.radio('theme'), 'value')
 )
 def update_dropdown(theme):
-
+    """
+        Este primeiro callback é sobre interação ThemeChangerAIO e o CSS do dropdown.
+        Por serem classes dbc e dcc, o ThemeChanger não afeta o dropdown. Por isso,
+        essa seção é destina a montar um CSS a depender do tema selecionado.
+    """
     if theme == dbc.themes.FLATLY or theme == dbc.themes.COSMO or theme == dbc.themes.JOURNAL:
         dropdown_style = {'backgroundColor': 'white', 'color': 'black'}
 
@@ -133,12 +151,18 @@ def update_dropdown(theme):
         dropdown_style = {'backgroundColor': 'black', 'color': 'black'}
     elif theme == dbc.themes.DARKLY:
         dropdown_style = {'backgroundColor': '#494544', 'color': 'black'}
-    elif theme == dbc.themes.SOLAR:
-        dropdown_style = {'backgroundColor': '#494544', 'color': 'black'}
 
     elif theme == dbc.themes.QUARTZ:
-        dropdown_style = {'backgroundColor': '#800be7', 'color': 'black'}
+        dropdown_style = {'backgroundColor': '#8c18f3', 'color': 'black'}
 
+    elif theme == dbc.themes.SOLAR:
+        dropdown_style = {'backgroundColor': '#104f5e', 'color': 'black'}
+
+    elif theme == dbc.themes.SUPERHERO:
+        dropdown_style = {'backgroundColor': '#505c6c', 'color': 'black'}
+
+    elif theme == dbc.themes.VAPOR:
+        dropdown_style = {'backgroundColor': '#200c34', 'color': '#e83cbc', 'border-color': '#e83cbc'}
 
     else:
         dropdown_style = {'backgroundColor': 'white', 'color': 'black'}
@@ -152,6 +176,16 @@ def update_dropdown(theme):
     Input(ThemeChangerAIO.ids.radio('theme'), 'value')
 )
 def update_graph1(values, theme):
+    """
+        Este segundo callback é destinado a mudar o comportamento e o layout do gráfico
+        com o input do dropdown e do ThemeChangerAIO. Por se tratar de um gráfico formado
+        com várias outras linhas, é utilizado o fig.add_trace dentro do laço for.
+
+        O uso do update_layout modifica o layout do gráfico. Usamos o template_from_url(theme)
+        para usar um modelo do bootstrap. margin=dict(l=0, r=0, t=5, b=10) redefine as margens
+        do gráfico.
+    """
+
     fig = go.Figure()
 
     interval = ('2013-03-15', '2023-03-17')
@@ -188,30 +222,51 @@ def update_graph1(values, theme):
     Input(ThemeChangerAIO.ids.radio('theme'), 'value')
 )
 def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
-    fig = go.Figure()
+    """
+        Este terceiro callback tem o comportamento muito semelhante ao segundo.
+        A diferença está na presença dos Inputs do botão. Usamos botões para
+        modificar o intervalo de tempo e, consequentemente, o gráfico mostrado.
+
+        ctx.triggered_id possui informações sobre o que iniciou o callback.
+        Usamos o mesmo para descobrir qual o id do botão que iniciou o evento.
+        Utilizamos laços de seleção e modificamos o intervalo de acordo com
+        que foi selecionado.
+
+        Com o intervalo em mãos, é selecionado o primeiro e o segundo valor de
+        fechamento da ação. Se o primeiro valor for maior que o segundo, o
+        gráfico ficará vermelho, indicando desvalorização naquele intervalo e
+        verde caso contrário.
+    """
 
     sub_stock = (stock_df.loc[stock_df['Name'] == value]).copy(deep=True)
 
     interval = ('2013-03-15', '2023-03-17')
+    suffix = ' all time'
 
     # 5 Dias
     if "btn1" == ctx.triggered_id:
         interval = ('2023-03-10', '2023-03-17')
+        suffix = ' past five days'
     # 1 Mês
     elif "btn2" == ctx.triggered_id:
         interval = ('2023-02-15', '2023-03-17')
+        suffix = ' past month'
     # 6 Meses
     elif "btn3" == ctx.triggered_id:
         interval = ('2022-09-10', '2023-03-17')
+        suffix = ' past 6 months'
     # 1 Ano
     elif "btn4" == ctx.triggered_id:
         interval = ('2022-03-15', '2023-03-17')
+        suffix = ' past year'
     # 5 Anos
     elif "btn5" == ctx.triggered_id:
         interval = ('2018-03-15', '2023-03-17')
+        suffix = ' past 5 years'
     # Máximo
     elif "btn6" == ctx.triggered_id:
         interval = ('2013-03-15', '2023-03-17')
+        suffix = ' all time'
 
     date_filter = ((sub_stock['Date'] >= interval[0]) & (sub_stock['Date'] <= interval[1]))
 
@@ -221,6 +276,15 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
     color = '#9ac692' if lst_close > fst_close else '#dd9999'
     line_c = '#53bf3f' if lst_close > fst_close else '#ea5d5d'
 
+
+    fig = go.Figure(go.Indicator(
+        mode="number+delta",
+        align='center',
+        value=lst_close,
+        number={"valueformat": "0.2f", "suffix": " USD"},
+        delta={"reference": fst_close, 'relative': True, "valueformat": ".2%", "suffix": suffix},
+        domain={'y': [0.75, 1], 'x': [0, 0.25]}))
+
     fig.add_trace(go.Scatter(
         x=sub_stock.loc[date_filter, 'Date'],
         y=sub_stock.loc[date_filter, 'Close'],
@@ -228,9 +292,9 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
         name=value,
         fill='tonexty',
         fillcolor=color,
+        line={'color': line_c}
     ))
 
-    fig.update_traces(line=dict(color=line_c))
     fig.update_layout(
         template=template_from_url(theme),
         margin=dict(l=0, r=0, t=5, b=10)
@@ -250,6 +314,10 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
     Input(ThemeChangerAIO.ids.radio('theme'), 'value')
 )
 def update_graph3(value, btn7, btn8, btn9, btn10, btn11, btn12, theme):
+    """
+        Este quarto callback tem o comportamento muito semelhante ao terceiro.
+        A única diferença reside no fato que usamos um candlestick chart
+    """
 
     sub_stock = (stock_df.loc[stock_df['Name'] == value]).copy(deep=True)
     interval = ('2013-03-15', '2023-03-17')
