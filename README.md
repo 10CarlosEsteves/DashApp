@@ -30,10 +30,10 @@ A escolha de criar um painel voltado para ações se deve à sua importância pa
 
 - <a href="https://dash-bootstrap-components.opensource.faculty.ai/docs/components/">Dash-Bootstrap-Components Components</a>
 
-</p>
-
 - <a href="https://github.com/AnnMarieW/dash-bootstrap-templates">Dash-Bootstrap-Templates QuickStart</a>
 
-- <a href="https://www.kaggle.com/datasets/soumendraprasad/stock](https://dashcheatsheet.pythonanywhere.com)https://dashcheatsheet.pythonanywhere.com">Dash Bootstrap Cheatsheet</a>
+- <a href="https://dashcheatsheet.pythonanywhere.com">Dash Bootstrap Cheatsheet</a>
 
 - <a href="https://hellodash.pythonanywhere.com/bootstrap-utility-classes/bootstrap-utility-classes#background">Dash-Bootstrap-Template classes</a>
+
+</p>
