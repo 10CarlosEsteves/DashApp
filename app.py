@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
+from setuptools.msvc import winreg
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -64,6 +65,7 @@ class_button1 = """
                 border-0
                 border-end
                 border-secondary
+                px-3
                 """
 
 graph2_row_style = {
@@ -101,7 +103,7 @@ app.layout = dbc.Container([
                     ])
                 ], style=div1_style),
             dcc.Graph(id='stocks')
-        ]),
+        ], width=6),
 
 
 
@@ -122,9 +124,8 @@ app.layout = dbc.Container([
                     ])
                 ], style=div1_style),
             dcc.Graph(id='candlestick')
-        ])
+        ], width=6)
     ], style=graph2_row_style)
-
 ])
 # Fim da construção em HTML do dashboard
 
@@ -241,7 +242,7 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
         para visualizar uma variação resumida de valores. O Indicator possui
         alguns modos de gráficos como o number, delta e gauge. No nosso exemplo
         estamos usando o number e delta. Esses modos foram usados para formatar
-        no estilo NASDAQ.
+        no estilo nasdaq.
     """
 
     sub_stock = (stock_df.loc[stock_df['Name'] == value]).copy(deep=True)
