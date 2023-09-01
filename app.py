@@ -2,25 +2,9 @@ from dash import Dash, html, dcc, Input, Output, ctx
 from dash_bootstrap_templates import ThemeChangerAIO, template_from_url
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-import plotly.express as px
-import plotly.io as pio
 import pandas as pd
-from setuptools.msvc import winreg
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
-# Selecionando os temas que vão ser utilizados no ThemeChangerAIO
-available_themes = [
-                        {"label": "Flatly", "value": dbc.themes.FLATLY},
-                        {"label": "Cosmo", "value": dbc.themes.COSMO},
-                        {"label": "Journal", "value": dbc.themes.JOURNAL},
-                        {"label": "Cyborg", "value": dbc.themes.CYBORG},
-                        {"label": "Darkly", "value": dbc.themes.DARKLY},
-                        {"label": "Quartz", "value": dbc.themes.QUARTZ},
-                        {"label": "Solar", "value": dbc.themes.SOLAR},
-                        {"label": "Superhero", "value": dbc.themes.SUPERHERO},
-                        {"label": "Vapor", "value": dbc.themes.VAPOR},
-                    ]
 
 # Importação dos dados externos e criação de DataFrames
 amazon_df = pd.read_csv("Assets/Data/Amazon.csv")
@@ -37,11 +21,13 @@ microsoft_df['Name'] = 'Microsoft'
 netflix_df['Name'] = 'Netflix'
 
 
-stocks_cpy = [amazon_df.copy(deep=True),
-              apple_df.copy(deep=True),
-              google_df.copy(deep=True),
-              microsoft_df.copy(deep=True),
-              netflix_df.copy(deep=True)]
+stocks_cpy = [
+                amazon_df.copy(deep=True),
+                apple_df.copy(deep=True),
+                google_df.copy(deep=True),
+                microsoft_df.copy(deep=True),
+                netflix_df.copy(deep=True)
+             ]
 
 # Concatenando todos os DataFrames em um só DataFrame
 stock_df = pd.concat(stocks_cpy, ignore_index=True)
@@ -58,7 +44,7 @@ div1_style = {'text-align': 'center'}
 class_title = 'text-center'
 
 class_button1 = """
-                bg-transparent 
+                bg-transparent
                 p-1 mt-2 text-center h2 
                 text-secondary
                 border rounded-0
@@ -71,17 +57,39 @@ class_button1 = """
 graph2_row_style = {
     'margin': '30px 1px'
 }
+
+# Selecionando os temas que vão ser utilizados no ThemeChangerAIO
+available_themes = [
+                        {"label": "Flatly", "value": dbc.themes.FLATLY},
+                        {"label": "Cosmo", "value": dbc.themes.COSMO},
+                        {"label": "Journal", "value": dbc.themes.JOURNAL},
+                        {"label": "Cyborg", "value": dbc.themes.CYBORG},
+                        {"label": "Darkly", "value": dbc.themes.DARKLY},
+                        {"label": "Quartz", "value": dbc.themes.QUARTZ},
+                        {"label": "Solar", "value": dbc.themes.SOLAR},
+                        {"label": "Superhero", "value": dbc.themes.SUPERHERO},
+                        {"label": "Vapor", "value": dbc.themes.VAPOR},
+                    ]
+
 # Fim da construção do CSS do dashboard
 
 
 # Inicio da construção em HTML do dashboard
 app.layout = dbc.Container([
+    
     # Seção do gráfico de linhas com multi comparação
     # Utilizando o ThemeChangerAIO para mudança de tema
     dbc.Row(ThemeChangerAIO(aio_id="theme", radio_props={"value": dbc.themes.FLATLY, "options": available_themes})),
 
     dbc.Row([html.H1(children='Dash App', className=class_title)]),
-    dbc.Row([dbc.Col([dcc.Dropdown(company_options, value=['Amazon', 'Apple', 'Google'], id='comparison-dropdown', multi=True)])]),
+
+    dbc.Row([dbc.Col([dcc.Dropdown(
+        company_options,
+        value=['Amazon', 'Apple', 'Google'],
+        id='comparison-dropdown',
+        multi=True
+    )])]),
+
     dcc.Graph(id='multicomparison'),
 
     dbc.Row([
@@ -89,8 +97,7 @@ app.layout = dbc.Container([
             # Seção do gráfico de linhas
             html.H1("Stock Close Chart", className=class_title),
 
-            dcc.Dropdown(company_options, value='Amazon', id='dropdown-close'),
-
+            dcc.Dropdown(company_options, value='Amazon', id='close-dropdown'),
             # Agrupamento de botões que permite filtrar a data
             html.Div([
                     dbc.ButtonGroup([
@@ -104,8 +111,6 @@ app.layout = dbc.Container([
                 ], style=div1_style),
             dcc.Graph(id='stocks')
         ], width=6),
-
-
 
         dbc.Col([
             # Seção do gráfico de CandleStick
@@ -134,7 +139,7 @@ app.layout = dbc.Container([
 @app.callback(
     [
      Output('comparison-dropdown', 'style'),
-     Output('dropdown-close', 'style'),
+     Output('close-dropdown', 'style'),
      Output('candlestick-dropdown', 'style')
      ],
     Input(ThemeChangerAIO.ids.radio('theme'), 'value')
@@ -213,7 +218,7 @@ def update_graph1(values, theme):
 
 @app.callback(
     Output(component_id='stocks', component_property='figure'),
-    Input(component_id='dropdown-close', component_property='value'),
+    Input(component_id='close-dropdown', component_property='value'),
     Input('btn1', 'n_clicks'),
     Input('btn2', 'n_clicks'),
     Input('btn3', 'n_clicks'),
@@ -290,7 +295,8 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
         value=lst_close,
         number={"valueformat": "0.2f", "suffix": " USD"},
         delta={"reference": fst_close, 'relative': True, "valueformat": ".2%", "suffix": suffix},
-        domain={'y': [0.75, 1], 'x': [0, 0.25]}))
+        domain={'y': [0.75, 1], 'x': [0, 0.25]}
+    ))
 
     fig.add_trace(go.Scatter(
         x=sub_stock.loc[date_filter, 'Date'],
@@ -306,6 +312,7 @@ def update_graph2(value, btn1, btn2, btn3, btn4, btn5, btn6, theme):
         template=template_from_url(theme),
         margin=dict(l=0, r=0, t=5, b=10)
     )
+
     return fig
 
 
@@ -351,12 +358,13 @@ def update_graph3(value, btn7, btn8, btn9, btn10, btn11, btn12, theme):
     date_filter = ((sub_stock['Date'] >= interval[0]) & (sub_stock['Date'] <= interval[1]))
     sub_stock = sub_stock.loc[date_filter]
 
-    fig = go.Figure(
-        data=[go.Candlestick(x=sub_stock['Date'],
-                            open=sub_stock['Open'],
-                            high=sub_stock['High'],
-                            low=sub_stock['Low'],
-                            close=sub_stock['Close'])])
+    fig = go.Figure(data=[
+                        go.Candlestick(x=sub_stock['Date'],
+                        open=sub_stock['Open'],
+                        high=sub_stock['High'],
+                        low=sub_stock['Low'],
+                        close=sub_stock['Close'])
+                    ])
 
     fig.update_layout(
         template=template_from_url(theme),
