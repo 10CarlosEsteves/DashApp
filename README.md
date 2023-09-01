@@ -36,4 +36,6 @@ A escolha de criar um painel voltado para ações se deve à sua importância pa
 
 - <a href="https://hellodash.pythonanywhere.com/bootstrap-utility-classes/bootstrap-utility-classes#background">Dash-Bootstrap-Template classes</a>
 
+- <a href="https://www.kaggle.com/datasets/soumendraprasad/stock">Dataset MAANG Historical Stock Market Data</a> 
+
 </p>
